@@ -21,7 +21,8 @@ def post_detail(request, pk):
     try:
         post = get_object_or_404(Post.objects.filter(pub_date__lte=today,
                                                      is_published=True,
-                                                     category__is_published=True), pk=pk)
+                                                     category__is_published=True),
+                                 pk=pk)
         context = {'post': post}
         return render(request, template_name, context)
     except IndexError:
