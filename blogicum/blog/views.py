@@ -3,6 +3,8 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from .models import Post
 import datetime
 
+POST_LIMIT = 5
+
 
 def index(request):
     today = datetime.datetime.now()
@@ -11,7 +13,7 @@ def index(request):
         'post_list': Post.objects.filter(pub_date__lte=today,
                                          is_published=True,
                                          category__is_published=True)
-                         .order_by('-pk')[0:5]}
+                         .order_by('-pub_date')[:POST_LIMIT]}
     return render(request, template_name, context)
 
 
@@ -37,7 +39,7 @@ def category_posts(request, category_slug):
         Post.objects.select_related('category')
         .filter(category__slug=category_slug,
                 is_published=True,
-                pub_date__lte=today).order_by('-pk'),
+                pub_date__lte=today),
         category__is_published=True
     )
 
